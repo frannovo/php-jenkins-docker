@@ -2,6 +2,12 @@ FROM java:8-jdk
 
 RUN apt-get update && apt-get install -y wget git curl zip && rm -rf /var/lib/apt/lists/*
 
+# PHP Tools
+RUN apt-get update && apt-get install -y ant phpunit phploc pdepend phpmd phpcpd phpdox
+RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar && php phpcs.phar -h
+# Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 ENV JENKINS_HOME /var/jenkins_home
 ENV JENKINS_SLAVE_AGENT_PORT 50000
 
