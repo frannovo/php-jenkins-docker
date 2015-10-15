@@ -4,7 +4,9 @@ RUN apt-get update && apt-get install -y wget git curl zip && rm -rf /var/lib/ap
 
 # PHP Tools
 RUN apt-get update && apt-get install -y ant phpunit phploc pdepend phpmd phpcpd phpdox
-RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar && php phpcs.phar -h
+# RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar && php phpcs.phar -h
+# RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar && php phpcbf.phar -h
+
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -53,6 +55,11 @@ EXPOSE 50000
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 USER jenkins
+
+# Install PHP_CodeSniffer as jenkins user
+RUN composer global require "squizlabs/php_codesniffer=*"
+# Add ~/.composer/vendor/bin to PATH
+ENV PATH $PATH:~/.composer/vendor/bin/
 
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
