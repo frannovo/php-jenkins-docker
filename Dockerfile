@@ -59,7 +59,7 @@ USER jenkins
 # Install PHP_CodeSniffer as jenkins user
 RUN composer global require "squizlabs/php_codesniffer=*"
 # Add ~/.composer/vendor/bin to PATH
-ENV PATH $PATH:~/.composer/vendor/bin/
+ENV PATH $PATH:$JENKINS_HOME/.composer/vendor/bin/
 
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
